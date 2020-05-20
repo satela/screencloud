@@ -1,0 +1,5 @@
+<page>
+   <item name="LogPanel.scene" props="" ifExport="分离模式" aName=""/>
+   <item name="ChartView.scene" props="" ifExport="分离模式" aName=""/>
+   <item name="DataGridView.scene" props="" ifExport="内嵌模式" aName=""/>
+</page>
