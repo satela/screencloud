@@ -1,11 +1,12 @@
 package
 {
 	import laya.components.Script;
+	import laya.events.Event;
 	import laya.maths.Point;
 	import laya.utils.Browser;
 	import laya.utils.Handler;
 	
-	import model.HttpRequestUtil;
+	import HttpRequestUtil;
 	
 	import ui.ChartViewUI;
 
@@ -52,9 +53,19 @@ package
 			uiSkin.outputlist.array = [];
 			//HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl + HttpRequestUtil.getGroupChartData,this,onGetGroupData,null,"post");
 
+			//uiSkin.toplabel.on(Event.DOUBLE_CLICK,this,onrefresh);
+
 			Laya.timer.once(2000,this,initChatDiv);
 			//Laya.timer.loop(10000,this,initChatDiv);
 
+		}
+		
+		private function onrefresh():void
+		{
+			getTodayOrders();
+			getMonthOrders();
+			getTenDyasOrders();
+			getCurMonthOrders();
 		}
 		
 		private function updateDateInputPos():void
@@ -167,15 +178,16 @@ package
 			
 			//groupdata.xaxisList = [120,210,350,400,800];
 			//groupdata.yaxisList = ["户外高清写真","01-03","01-04","01-05","01-06"];
-			Laya.timer.loop(10000,this,getTodayOrders);
+			Laya.timer.loop(30000,this,getTodayOrders);
 			getTodayOrders();
-			Laya.timer.loop(3600000,this,getMonthOrders);
+			//Laya.timer.loop(6000000,this,getMonthOrders);
+			Laya.timer.loop(10000,this,getMonthOrders);
 			getMonthOrders();
 			
-			Laya.timer.loop(60000,this,getTenDyasOrders);
+			Laya.timer.loop(300000,this,getTenDyasOrders);
 			getTenDyasOrders();
 			
-			Laya.timer.loop(3600000,this,getCurMonthOrders);
+			Laya.timer.loop(7200000,this,getCurMonthOrders);
 			getCurMonthOrders();
 			
 			//Browser.window.getChartData();
@@ -184,11 +196,11 @@ package
 		private function onGetTopDataBack(data:*):void
 		{
 			var orderdata:Object = JSON.parse(data);
-			uiSkin.newgroup.text =  parseInt(orderdata.newGroup.toString());
+			uiSkin.newgroup.text =  parseInt(orderdata.newGroup).toString();
 			
 			uiSkin.todayOrderAmount.text = (orderdata.amount as Number).toFixed(2);
 			
-			uiSkin.todayOrderNun.text = parseInt((orderdata.num).toString());
+			uiSkin.todayOrderNun.text = parseInt(orderdata.num).toString();
 			
 			uiSkin.monthyOrderAmount.text = (orderdata.monthamount as Number).toFixed(2);
 
@@ -205,7 +217,8 @@ package
 			var orderdata:Object = JSON.parse(data);
 			for(var i:int=0;i < orderdata.yaxisList.length;i++)
 			{
-				orderdata.yaxisList[i] = orderdata.yaxisList[i]/10000;
+				var num:Number = orderdata.yaxisList[i]/10000;
+				orderdata.yaxisList[i] = parseFloat((num.toFixed(4)));
 			}
 			Browser.window.freshBarChart(monthChart,orderdata.xaxisList,orderdata.yaxisList,"月度销售额");
 						
@@ -223,7 +236,8 @@ package
 			var orderdata:Object = JSON.parse(data);
 			for(var i:int=0;i < orderdata.yaxisList.length;i++)
 			{
-				orderdata.yaxisList[i] = orderdata.yaxisList[i]/10000;
+				var num:Number = orderdata.yaxisList[i]/10000;
+				orderdata.yaxisList[i] = parseFloat((num.toFixed(4)));
 			}
 			Browser.window.freshBarChart(dayChart,orderdata.xaxisList,orderdata.yaxisList,"十日单日销售额");
 			
@@ -303,7 +317,7 @@ package
 			for(var i:int=0;i < materialRank.length;i++)
 			{
 				xlist.push(materialRank[i].rankname);
-				ylist.push((parseFloat(materialRank[i].amountNum as Number)));
+				ylist.push((parseFloat(materialRank[i].amountNum)));
 			}
 			xlist.reverse();
 			ylist.reverse();

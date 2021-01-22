@@ -1152,10 +1152,10 @@ var Handler=(function(){
 })()
 
 
-//class model.HttpRequestUtil
+//class HttpRequestUtil
 var HttpRequestUtil=(function(){
 	function HttpRequestUtil(){}
-	__class(HttpRequestUtil,'model.HttpRequestUtil');
+	__class(HttpRequestUtil,'HttpRequestUtil');
 	var __proto=HttpRequestUtil.prototype;
 	__proto.newRequest=function(url,caller,complete,param,requestType,onProgressFun){
 		var _$this=this;
@@ -1219,6 +1219,7 @@ var HttpRequestUtil=(function(){
 	HttpRequestUtil._instance=null;
 	HttpRequestUtil.httpUrl="http://47.111.152.226:8060/";
 	HttpRequestUtil.loginInUrl="login/login?";
+	HttpRequestUtil.checkHasAuthority="user/canSeeChart?";
 	HttpRequestUtil.getGroupChartData="groupInfo/getDayGroupChart?";
 	HttpRequestUtil.getTodayOrderData="orderInfo/getToDayOrderData?";
 	HttpRequestUtil.getTodayDataUrl="orderInfo/getTodayData?";
@@ -1241,7 +1242,7 @@ var GameConfig=(function(){
 		reg("ChartControl",ChartControl);
 		reg("laya.display.Text",Text);
 		reg("laya.display.Sprite",Sprite);
-		reg("script.login.LogPanelControl",LogPanelControl);
+		reg("LogPanelControl",LogPanelControl);
 	}
 
 	GameConfig.width=640;
@@ -1299,10 +1300,10 @@ var Main=(function(){
 })()
 
 
-//class utils.UtilTool
+//class UtilTool
 var UtilTool=(function(){
 	function UtilTool(){}
-	__class(UtilTool,'utils.UtilTool');
+	__class(UtilTool,'UtilTool');
 	UtilTool.oneCutNineAdd=function(fnum){
 		var numstr=fnum.toFixed(1);
 		var dotnum=parseInt(numstr.split(".")[1]);
@@ -27245,6 +27246,7 @@ var HttpRequest=(function(_super){
 			if (!data || (typeof data=='string'))http.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			else http.setRequestHeader("Content-Type","application/json");
 		}
+		http.withCredentials=true;
 		http.responseType=responseType!=="arraybuffer" ? "text" :"arraybuffer";
 		http.onerror=function (e){
 			_this._onError(e);
@@ -30120,7 +30122,7 @@ var CharRender_Native=(function(_super){
 })(ICharRender)
 
 
-//class script.login.LogPanelControl extends laya.components.Script
+//class LogPanelControl extends laya.components.Script
 var LogPanelControl=(function(_super){
 	function LogPanelControl(){
 		this.uiSKin=null;
@@ -30128,7 +30130,7 @@ var LogPanelControl=(function(_super){
 		LogPanelControl.__super.call(this);
 	}
 
-	__class(LogPanelControl,'script.login.LogPanelControl',_super);
+	__class(LogPanelControl,'LogPanelControl',_super);
 	var __proto=LogPanelControl.prototype;
 	//super();
 	__proto.onStart=function(){
@@ -30148,10 +30150,9 @@ var LogPanelControl=(function(_super){
 		this.uiSKin.input_account.on("keydown",this,this.onAccountKeyUp);
 		this.uiSKin.input_pwd.on("keydown",this,this.onAccountKeyUp);
 		this.uiSKin.input_account.focus=true;
-		var param="loginname=ls"+"&pwd=11223344";
-		HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl+"login/login?",this,this.onLoginBack,param,"post");
 	}
 
+	//HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl+HttpRequestUtil.loginInUrl,this,onLoginBack,param,"post");
 	__proto.onResizeBrower=function(){
 		this.uiSKin.mainpanel.height=Browser.height;
 		this.uiSKin.mainpanel.width=Browser.width;
@@ -30178,20 +30179,29 @@ var LogPanelControl=(function(_super){
 			Browser.window.alert("密码位数至少是6位");
 			return;
 		};
-		var param="loginname="+this.uiSKin.input_account.text+"&pwd="+this.uiSKin.input_pwd.text;
-		HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl+"login/login?",this,this.onLoginBack,param,"post");
+		var param="phonenum="+13564113173;
+		HttpRequestUtil.instance.Request("http://127.0.0.1:8080/user/getVerifyCode",this,this.onLoginBack,param,"post");
 	}
 
 	__proto.onLoginBack=function(data){
 		var result=JSON.parse(data);
 		if(result.code==200){
-			UtilTool.setLocalVar("useraccount",this.uiSKin.input_account.text);
-			UtilTool.setLocalVar("userpwd",this.uiSKin.input_pwd.text);
-			Scene.open("ChartView.scene");
+			HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl+"user/canSeeChart?",this,this.onCheckAuthorityBack,this.param,"post");
 		}
 	}
 
 	//ViewManager.instance.openView(ViewManager.VIEW_FIRST_PAGE);
+	__proto.onCheckAuthorityBack=function(data){
+		if(data==1){
+			UtilTool.setLocalVar("useraccount",this.uiSKin.input_account.text);
+			UtilTool.setLocalVar("userpwd",this.uiSKin.input_pwd.text);
+			Scene.open("ChartView.scene");
+		}
+		else{
+			Browser.window.alert("您没有查看权限");
+		}
+	}
+
 	__proto.onRegister=function(){}
 	//ViewManager.instance.openView(ViewManager.VIEW_REGPANEL,true);
 	__proto.onResetpwd=function(){}
@@ -30234,6 +30244,13 @@ var ChartControl=(function(_super){
 	}
 
 	//Laya.timer.loop(10000,this,initChatDiv);
+	__proto.onrefresh=function(){
+		this.getTodayOrders();
+		this.getMonthOrders();
+		this.getTenDyasOrders();
+		this.getCurMonthOrders();
+	}
+
 	__proto.updateDateInputPos=function(){}
 	__proto.initChatDiv=function(){
 		var echart=Browser.window.echarts;
@@ -30266,22 +30283,22 @@ var ChartControl=(function(_super){
 		chartdivHour.style.zIndex=999;
 		Browser.document.body.appendChild(chartdivHour);
 		this.dayHourChart=echart.init(chartdivHour);
-		Laya.timer.loop(10000,this,this.getTodayOrders);
+		Laya.timer.loop(30000,this,this.getTodayOrders);
 		this.getTodayOrders();
-		Laya.timer.loop(3600000,this,this.getMonthOrders);
+		Laya.timer.loop(10000,this,this.getMonthOrders);
 		this.getMonthOrders();
-		Laya.timer.loop(60000,this,this.getTenDyasOrders);
+		Laya.timer.loop(300000,this,this.getTenDyasOrders);
 		this.getTenDyasOrders();
-		Laya.timer.loop(3600000,this,this.getCurMonthOrders);
+		Laya.timer.loop(7200000,this,this.getCurMonthOrders);
 		this.getCurMonthOrders();
 	}
 
 	//Browser.window.getChartData();
 	__proto.onGetTopDataBack=function(data){
 		var orderdata=JSON.parse(data);
-		this.uiSkin.newgroup.text=parseInt(orderdata.newGroup.toString());
+		this.uiSkin.newgroup.text=parseInt(orderdata.newGroup).toString();
 		this.uiSkin.todayOrderAmount.text=(orderdata.amount).toFixed(2);
-		this.uiSkin.todayOrderNun.text=parseInt((orderdata.num).toString());
+		this.uiSkin.todayOrderNun.text=parseInt(orderdata.num).toString();
 		this.uiSkin.monthyOrderAmount.text=(orderdata.monthamount).toFixed(2);
 	}
 
@@ -30292,7 +30309,8 @@ var ChartControl=(function(_super){
 	__proto.onGetMonthOrdersData=function(data){
 		var orderdata=JSON.parse(data);
 		for(var i=0;i < orderdata.yaxisList.length;i++){
-			orderdata.yaxisList[i]=orderdata.yaxisList[i]/10000;
+			var num=orderdata.yaxisList[i]/10000;
+			orderdata.yaxisList[i]=parseFloat((num.toFixed(4)));
 		}
 		Browser.window.freshBarChart(this.monthChart,orderdata.xaxisList,orderdata.yaxisList,"月度销售额");
 	}
@@ -30304,7 +30322,8 @@ var ChartControl=(function(_super){
 	__proto.onGetTenDaysOrdersData=function(data){
 		var orderdata=JSON.parse(data);
 		for(var i=0;i < orderdata.yaxisList.length;i++){
-			orderdata.yaxisList[i]=orderdata.yaxisList[i]/10000;
+			var num=orderdata.yaxisList[i]/10000;
+			orderdata.yaxisList[i]=parseFloat((num.toFixed(4)));
 		}
 		Browser.window.freshBarChart(this.dayChart,orderdata.xaxisList,orderdata.yaxisList,"十日单日销售额");
 	}
@@ -30338,7 +30357,7 @@ var ChartControl=(function(_super){
 		var ylist=[];
 		for(var i=0;i < materialRank.length;i++){
 			xlist.push(materialRank[i].rankname);
-			ylist.push((parseFloat(materialRank[i] .amountNum)));
+			ylist.push((parseFloat(materialRank[i].amountNum)));
 		}
 		xlist.reverse();
 		ylist.reverse();
@@ -37688,6 +37707,7 @@ var View=(function(_super){
 //class ui.ChartViewUI extends laya.display.Scene
 var ChartViewUI=(function(_super){
 	function ChartViewUI(){
+		this.toplabel=null;
 		this.newgroup=null;
 		this.todayOrderNun=null;
 		this.todayOrderAmount=null;
@@ -48476,7 +48496,7 @@ var VBox=(function(_super){
 })(LayoutBox)
 
 
-	Laya.__init([EventDispatcher,LoaderManager,CharBook,LocalStorage,View,GameConfig,Timer,SceneUtils,WebGLContext2D,GraphicAnimation,CallLater,Path]);
+	Laya.__init([LoaderManager,EventDispatcher,CharBook,GameConfig,View,LocalStorage,Timer,SceneUtils,WebGLContext2D,GraphicAnimation,CallLater,Path]);
 	/**LayaGameStart**/
 	new Main();
 

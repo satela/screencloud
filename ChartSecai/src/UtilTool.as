@@ -1,4 +1,4 @@
-package utils
+package
 {
 	import laya.filters.ColorFilter;
 	import laya.maths.Point;

@@ -60,6 +60,8 @@ package laya.net {
 				if (!data || data is String) http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				else http.setRequestHeader("Content-Type", "application/json");
 			}
+			
+			http.withCredentials = true;
 			http.responseType = responseType !== "arraybuffer" ? "text" : "arraybuffer";
 			http.onerror = function(e:*):void {
 				_this._onError(e);

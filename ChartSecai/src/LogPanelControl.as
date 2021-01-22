@@ -1,5 +1,4 @@
-package script.login
-{	
+package {	
 	import laya.components.Script;
 	import laya.display.Input;
 	import laya.display.Scene;
@@ -9,11 +8,11 @@ package script.login
 	import laya.ui.Button;
 	import laya.utils.Browser;
 	
-	import model.HttpRequestUtil;
+	import HttpRequestUtil;
 	
 	import ui.LogPanelUI;
 	
-	import utils.UtilTool;
+	import UtilTool;
 	
 	public class LogPanelControl extends Script
 	{
@@ -61,8 +60,8 @@ package script.login
 			
 			uiSKin.input_account.focus = true;
 			
-			var param:String = "loginname=ls" +"&pwd=11223344";
-			HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl + HttpRequestUtil.loginInUrl,this,onLoginBack,param,"post");
+			//var param:String = "loginname=ls" +"&pwd=11223344";
+			//HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl + HttpRequestUtil.loginInUrl,this,onLoginBack,param,"post");
 
 		}
 		
@@ -105,6 +104,8 @@ package script.login
 			
 			var param:String = "loginname=" + uiSKin.input_account.text + "&pwd=" + uiSKin.input_pwd.text;
 			HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl + HttpRequestUtil.loginInUrl,this,onLoginBack,param,"post");
+			
+			
 		}
 		
 		private function onLoginBack(data:Object):void
@@ -117,10 +118,10 @@ package script.login
 
 				//ViewManager.showAlert("登陆成功");
 				//EventCenter.instance.event(EventCenter.LOGIN_SUCESS, uiSKin.input_account.text);
-				UtilTool.setLocalVar("useraccount",uiSKin.input_account.text);
-				UtilTool.setLocalVar("userpwd",uiSKin.input_pwd.text);
 				
-				Scene.open("ChartView.scene");
+				HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl + HttpRequestUtil.checkHasAuthority,this,onCheckAuthorityBack,param,"post");
+
+				
 				//Userdata.instance.loginTime = (new Date()).getTime();
 				//UtilTool.setLocalVar("loginTime",Userdata.instance.loginTime);
 				
@@ -128,6 +129,23 @@ package script.login
 				//ViewManager.instance.openView(ViewManager.VIEW_FIRST_PAGE);
 			}
 			
+		}
+		
+		private function onCheckAuthorityBack(data:Object):void
+		{
+			
+			//var result:Object = JSON.parse(data as String);
+			if(data == 1)
+			{
+				UtilTool.setLocalVar("useraccount",uiSKin.input_account.text);
+				UtilTool.setLocalVar("userpwd",uiSKin.input_pwd.text);
+				
+				Scene.open("ChartView.scene");
+			}
+			else
+			{
+				Browser.window.alert("您没有查看权限");
+			}
 		}
 		private function onRegister():void
 		{

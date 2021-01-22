@@ -5,6 +5,7 @@ package ui {
 	import ChartControl;
 
 	public class ChartViewUI extends Scene {
+		public var toplabel:Label;
 		public var newgroup:Label;
 		public var todayOrderNun:Label;
 		public var todayOrderAmount:Label;

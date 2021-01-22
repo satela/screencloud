@@ -1,4 +1,4 @@
-package model
+package
 {
 	import laya.events.Event;
 	import laya.net.HttpRequest;
@@ -15,6 +15,9 @@ package model
 
 		public static const loginInUrl:String = "login/login?";
 
+		public static const checkHasAuthority:String = "user/canSeeChart?";
+
+		
 		public static const getGroupChartData:String = "groupInfo/getDayGroupChart?";
 
 		public static const getTodayOrderData:String = "orderInfo/getToDayOrderData?";

@@ -4,7 +4,7 @@ package ui {
 	import laya.display.*;
 	import laya.display.Text;
 	import laya.display.Sprite;
-	import script.login.LogPanelControl;
+	import LogPanelControl;
 
 	public class LogPanelUI extends View {
 		public var mainpanel:Panel;

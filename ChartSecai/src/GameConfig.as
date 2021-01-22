@@ -6,7 +6,7 @@ package {
 	import ChartControl;
 	import laya.display.Text;
 	import laya.display.Sprite;
-	import script.login.LogPanelControl;
+	import LogPanelControl;
 	/**
 	 * 游戏初始化配置
 	 */
@@ -30,7 +30,7 @@ package {
 			reg("ChartControl",ChartControl);
 			reg("laya.display.Text",Text);
 			reg("laya.display.Sprite",Sprite);
-			reg("script.login.LogPanelControl",LogPanelControl);
+			reg("LogPanelControl",LogPanelControl);
 		}
 		GameConfig.init();
 	}
