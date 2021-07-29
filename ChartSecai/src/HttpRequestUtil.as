@@ -11,7 +11,7 @@ package
 		private static var _instance:HttpRequestUtil;
 		
 		public static var httpUrl:String =  "http://47.111.152.226:8060/";//"../scfy/";//http://www.cmyk.com.cn/scfy/" ;//	"http://47.98.218.56/scfy/"; //"http://dhs3iy.natappfree.cc/";//
-		//public static var httpUrl:String =  "http://127.0.0.1:8080/";//"../scfy/";//http://www.cmyk.com.cn/scfy/" ;//	"http://47.98.218.56/scfy/"; //"http://dhs3iy.natappfree.cc/";//
+		//public static var httpUrl:String =  "http://127.0.0.1:8090/";//"../scfy/";//http://www.cmyk.com.cn/scfy/" ;//	"http://47.98.218.56/scfy/"; //"http://dhs3iy.natappfree.cc/";//
 
 		public static const loginInUrl:String = "login/login?";
 

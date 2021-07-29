@@ -30179,8 +30179,8 @@ var LogPanelControl=(function(_super){
 			Browser.window.alert("密码位数至少是6位");
 			return;
 		};
-		var param="phonenum="+13564113173;
-		HttpRequestUtil.instance.Request("http://127.0.0.1:8080/user/getVerifyCode",this,this.onLoginBack,param,"post");
+		var param="loginname="+this.uiSKin.input_account.text+"&pwd="+this.uiSKin.input_pwd.text;
+		HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl+"login/login?",this,this.onLoginBack,param,"post");
 	}
 
 	__proto.onLoginBack=function(data){
