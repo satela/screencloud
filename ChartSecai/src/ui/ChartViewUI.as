@@ -5,13 +5,16 @@ package ui {
 	import ChartControl;
 
 	public class ChartViewUI extends Scene {
+		public var timetxt:Label;
+		public var datetxt:Label;
 		public var toplabel:Label;
 		public var newgroup:Label;
 		public var todayOrderNun:Label;
 		public var todayOrderAmount:Label;
 		public var monthyOrderAmount:Label;
 		public var areaList:List;
-		public var outputlist:List;
+		public var maskimg:Image;
+		public var manufacturePanel:Panel;
 		public var materialBox:Box;
 		public var monthBox:Box;
 		public var tendayBox:Box;

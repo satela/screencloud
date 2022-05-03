@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":2,
-    "selecteID":3,
+    "selectedBox":38,
+    "selecteID":85,
     "searchKey":"Scene",
     "props":{"width":1920,"sceneColor":"#0c1339","height":1080},
     "nodeParent":-1,
-    "maxID":84,
+    "maxID":88,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -35,12 +35,41 @@
             "props":{"y":-15.5,"x":206.5,"skin":"skingreen/title.png"},
             "nodeParent":2,
             "label":"Image",
-            "isDirectory":false,
+            "isOpen":true,
+            "isDirectory":true,
             "isAniNode":true,
-            "hasChild":false,
+            "hasChild":true,
             "compId":38,
             "child":[
-                ],
+                {
+                    "x":30,
+                    "type":"Label",
+                    "searchKey":"Label,timetxt",
+                    "props":{"y":33,"var":"timetxt","text":"20:12:12","right":-150,"fontSize":33,"color":"#B9F6CC","align":"left"},
+                    "nodeParent":38,
+                    "label":"timetxt",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":85,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Label",
+                    "searchKey":"Label,datetxt",
+                    "props":{"y":32,"x":-150,"var":"datetxt","text":"2022-02-12","fontSize":33,"color":"#B9F6CC","align":"left"},
+                    "nodeParent":38,
+                    "label":"datetxt",
+                    "isOpen":true,
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":84,
+                    "child":[
+                        ]
+                }],
             "$HIDDEN":false
         },
         {
@@ -135,14 +164,13 @@
             "props":{"y":140,"x":51,"space":60},
             "nodeParent":2,
             "label":"HBox",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":18,
             "child":[
                 {
-                    "x":30,
                     "type":"Box",
                     "searchKey":"Box",
                     "props":{},
@@ -155,7 +183,6 @@
                     "compId":9,
                     "child":[
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label,newgroup",
                             "props":{"y":1,"x":0,"width":400,"var":"newgroup","text":"0","fontSize":40,"font":"Arial","color":"#c76B3A","bold":true,"align":"center"},
@@ -169,7 +196,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label",
                             "props":{"y":55,"x":0,"width":400,"text":"今日新增客户（个）","fontSize":32,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},
@@ -184,7 +210,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "searchKey":"Box",
                     "props":{"y":0,"x":400},
@@ -197,7 +222,6 @@
                     "compId":28,
                     "child":[
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label,todayOrderNun",
                             "props":{"y":1,"x":0,"width":400,"var":"todayOrderNun","text":"0","fontSize":40,"font":"Arial","color":"#FCF66A","bold":true,"align":"center"},
@@ -211,7 +235,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label",
                             "props":{"y":55,"x":0,"width":400,"text":"今日订单笔数（笔）","fontSize":32,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},
@@ -226,7 +249,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "searchKey":"Box",
                     "props":{"y":0,"x":800},
@@ -239,7 +261,6 @@
                     "compId":31,
                     "child":[
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label,todayOrderAmount",
                             "props":{"y":1,"x":0,"width":400,"var":"todayOrderAmount","text":"0","fontSize":40,"font":"Arial","color":"#FCF66A","bold":true,"align":"center"},
@@ -253,7 +274,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label",
                             "props":{"y":55,"x":0,"width":400,"text":"今日销售额（元）","fontSize":32,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},
@@ -268,7 +288,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Box",
                     "searchKey":"Box",
                     "props":{"y":0,"x":1200},
@@ -281,7 +300,6 @@
                     "compId":34,
                     "child":[
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label,monthyOrderAmount",
                             "props":{"y":1,"x":0,"width":400,"var":"monthyOrderAmount","text":"0","fontSize":40,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},
@@ -295,7 +313,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label",
                             "props":{"y":55,"x":0,"width":400,"text":"本月销售额（元）","fontSize":32,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},
@@ -317,14 +334,13 @@
             "props":{"y":296,"x":17},
             "nodeParent":2,
             "label":"Box",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":48,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image",
                     "props":{"y":11,"width":616,"skin":"skingreen/bg.png","sizeGrid":"30,30,30,30","height":360},
@@ -353,7 +369,6 @@
                     "$HIDDEN":false
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":-3,"x":202,"width":224,"text":"区域订单排行（日）","fontSize":24,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},
@@ -367,7 +382,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":38,"x":75,"text":"序号","fontSize":20,"font":"Arial","color":"#ABECD7"},
@@ -381,7 +395,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":39,"x":268,"text":"区域名称","fontSize":20,"font":"Arial","color":"#ABECD7"},
@@ -395,7 +408,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":41,"x":488,"text":"订单总额","fontSize":20,"font":"Arial","color":"#ABECD7"},
@@ -409,7 +421,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"List",
                     "searchKey":"List,areaList",
                     "props":{"y":63,"x":7,"width":605,"var":"areaList","height":297},
@@ -431,14 +442,13 @@
             "props":{"y":692,"x":17},
             "nodeParent":2,
             "label":"Box",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":49,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image",
                     "props":{"y":11,"width":616,"skin":"skingreen/bg.png","sizeGrid":"30,30,30,30","height":360},
@@ -467,7 +477,6 @@
                     "$HIDDEN":false
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":-3,"x":199,"width":224,"text":"输出中心排行（日）","height":24,"fontSize":24,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},
@@ -481,7 +490,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":38,"x":75,"text":"序号","fontSize":20,"font":"Arial","color":"#ABECD7"},
@@ -495,7 +503,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":39,"x":248,"text":"输出中心名称","fontSize":20,"font":"Arial","color":"#ABECD7"},
@@ -509,7 +516,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":41,"x":488,"text":"订单总额","fontSize":20,"font":"Arial","color":"#ABECD7"},
@@ -523,16 +529,29 @@
                         ]
                 },
                 {
-                    "x":30,
-                    "type":"List",
-                    "searchKey":"List,outputlist",
-                    "props":{"y":63,"x":7,"width":605,"var":"outputlist","height":297},
+                    "type":"Image",
+                    "searchKey":"Image,maskimg",
+                    "props":{"y":63,"x":7,"width":605,"var":"maskimg","skin":"comp/image.png","height":297},
                     "nodeParent":49,
-                    "label":"outputlist",
+                    "label":"maskimg",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":56,
+                    "compId":87,
+                    "child":[
+                        ]
+                },
+                {
+                    "type":"Panel",
+                    "searchKey":"Panel,manufacturePanel",
+                    "props":{"y":63,"x":7,"width":605,"var":"manufacturePanel","height":297},
+                    "nodeParent":49,
+                    "label":"manufacturePanel",
+                    "isOpen":true,
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":86,
                     "child":[
                         ]
                 }],
@@ -545,14 +564,13 @@
             "props":{"y":296,"x":652,"var":"materialBox"},
             "nodeParent":2,
             "label":"materialBox",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":59,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image",
                     "props":{"y":11,"width":616,"skin":"skingreen/bg.png","sizeGrid":"30,30,30,30","height":756},
@@ -581,7 +599,6 @@
                     "$HIDDEN":false
                 },
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"y":-3,"x":202,"width":219,"text":"类别排行（万元/月）","height":24,"fontSize":24,"font":"Arial","color":"#ABECD7","bold":true,"align":"center"},

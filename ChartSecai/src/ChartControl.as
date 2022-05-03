@@ -1,12 +1,12 @@
 package
 {
+	import HttpRequestUtil;
+	
 	import laya.components.Script;
 	import laya.events.Event;
 	import laya.maths.Point;
 	import laya.utils.Browser;
 	import laya.utils.Handler;
-	
-	import HttpRequestUtil;
 	
 	import ui.ChartViewUI;
 
@@ -21,6 +21,9 @@ package
 		private var dayChart:*;
 		
 		private var dayHourChart:*;
+		
+		private var manufactureRankItems:Vector.<RankItem>;
+		private var lastManuNum:int = 1;
 		public function ChartControl()
 		{
 		}
@@ -40,21 +43,31 @@ package
 			
 			uiSkin.areaList.array = [];
 			
-			uiSkin.outputlist.itemRender = RankItem;
-			
-			//uiSkin.applylist.vScrollBarSkin = "";
-			uiSkin.outputlist.repeatX = 1;
-			uiSkin.outputlist.spaceY = 0;
-			
-			uiSkin.outputlist.renderHandler = new Handler(this, updateAreaList);
-			uiSkin.outputlist.selectEnable = false;
+//			uiSkin.outputlist.itemRender = RankItem;
+//			
+//			//uiSkin.applylist.vScrollBarSkin = "";
+//			uiSkin.outputlist.repeatX = 1;
+//			uiSkin.outputlist.spaceY = 0;
+//			
+//			uiSkin.outputlist.renderHandler = new Handler(this, updateAreaList);
+//			uiSkin.outputlist.selectEnable = false;
 			
 			uiSkin.areaList.array = [];
-			uiSkin.outputlist.array = [];
+			manufactureRankItems = new Vector.<RankItem>();
+			for(var i:int=0;i < 20;i++)
+			{
+				manufactureRankItems.push(new RankItem());
+				manufactureRankItems[i].y = 28*i;
+				manufactureRankItems[i].visible = false;
+				uiSkin.manufacturePanel.addChild(manufactureRankItems[i]);
+			}
+			uiSkin.maskimg.visible = false;
+	//		uiSkin.outputlist.array = [];
 			//HttpRequestUtil.instance.Request(HttpRequestUtil.httpUrl + HttpRequestUtil.getGroupChartData,this,onGetGroupData,null,"post");
 
 			//uiSkin.toplabel.on(Event.DOUBLE_CLICK,this,onrefresh);
-
+			Laya.timer.loop(1000,this,updateTime);
+			updateTime();
 			Laya.timer.once(2000,this,initChatDiv);
 			//Laya.timer.loop(10000,this,initChatDiv);
 
@@ -190,6 +203,8 @@ package
 			Laya.timer.loop(7200000,this,getCurMonthOrders);
 			getCurMonthOrders();
 			
+			Laya.timer.loop(50,this,scrollRank);
+
 			//Browser.window.getChartData();
 			
 		}
@@ -424,18 +439,55 @@ package
 			
 			manufactRank.sort(compareAmount);
 			
-			while(manufactRank.length > 10)
-			{
-				manufactRank.splice(manufactRank.length - 1,1);
-			}
+//			while(manufactRank.length > 10)
+//			{
+//				manufactRank.splice(manufactRank.length - 1,1);
+//			}
 			
 			for(var i:int=0;i < manufactRank.length;i++)
 			{
 				manufactRank[i].seqNum = (i+1);
 			}
 			
-			uiSkin.outputlist.array = manufactRank;
+			//uiSkin.outputlist.array = manufactRank;
+			if(manufactRank.length > 0)
+			{
+				var addnum:int = manufactRank.length - lastManuNum;
+				var thebottomPos:Number = manufactureRankItems[lastManuNum - 1].y;
+				for(var i:int=lastManuNum;i < lastManuNum + addnum;i++)
+				{
+					if(i < manufactureRankItems.length)
+					{
+						manufactureRankItems[i].y = manufactureRankItems[i - 1].y + 28;
+					}
+				}
+				for(var i:int=0;i < lastManuNum;i++)
+				{
+					if(manufactureRankItems[i].y > thebottomPos)
+					{
+						manufactureRankItems[i].y += 28 * addnum;
+					}
+				}
+				for(var i:int=0;i < manufactureRankItems.length;i++)		
+				{
+					if(i < manufactRank.length)
+					{
+						manufactureRankItems[i].setData(manufactRank[i]);
+						manufactureRankItems[i].visible = true;
+					}
+					else
+						manufactureRankItems[i].visible = false;
+
+				}
+				
+			}
+			if(manufactRank.length <= 10)
+			{
+				for(var i:int=0;i < manufactureRankItems.length;i++)
+					manufactureRankItems[i].y = 28*i;
+			}
 			
+			lastManuNum = manufactRank.length;
 			
 //			var materialRank:Array = [];
 //			for(var materialname in materialrank)
@@ -472,6 +524,30 @@ package
 			for(var i:int=0;i < daygesture.length;i++)
 				daygesture[i] /= 10000;
 			Browser.window.freshZheChart(dayHourChart,hours,daygesture);
+		}
+		
+		private function scrollRank():void
+		{
+			if(lastManuNum > 10)
+			{
+				for(var i:int=0;i < lastManuNum;i++)
+				{
+					if(manufactureRankItems[i].y - 1 <= -28)
+					{
+						manufactureRankItems[i].y = 28 * (lastManuNum-1);
+					}
+					else
+						manufactureRankItems[i].y = manufactureRankItems[i].y -1;
+				}
+			}
+		}
+		
+		private function updateTime():void
+		{
+			var fulltime:String = UtilTool.formatFullDateTime(new Date());
+			this.uiSkin.datetxt.text = fulltime.split(" ")[0];
+			this.uiSkin.timetxt.text = fulltime.split(" ")[1];
+
 		}
 		
 		private function compareAmount(a:*,b:*):int

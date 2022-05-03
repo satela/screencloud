@@ -1262,7 +1262,7 @@ var GameConfig=(function(){
 	GameConfig.screenMode="none";
 	GameConfig.alignV="top";
 	GameConfig.alignH="left";
-	GameConfig.startScene="ChartView.scene";
+	GameConfig.startScene="LogPanel.scene";
 	GameConfig.sceneRoot="";
 	GameConfig.debug=false;
 	GameConfig.stat=false;
@@ -30231,6 +30231,8 @@ var ChartControl=(function(_super){
 		this.monthChart=null;
 		this.dayChart=null;
 		this.dayHourChart=null;
+		this.manufactureRankItems=null;
+		this.lastManuNum=1;
 		ChartControl.__super.call(this);
 	}
 
@@ -30244,13 +30246,17 @@ var ChartControl=(function(_super){
 		this.uiSkin.areaList.renderHandler=new Handler(this,this.updateAreaList);
 		this.uiSkin.areaList.selectEnable=false;
 		this.uiSkin.areaList.array=[];
-		this.uiSkin.outputlist.itemRender=RankItem;
-		this.uiSkin.outputlist.repeatX=1;
-		this.uiSkin.outputlist.spaceY=0;
-		this.uiSkin.outputlist.renderHandler=new Handler(this,this.updateAreaList);
-		this.uiSkin.outputlist.selectEnable=false;
 		this.uiSkin.areaList.array=[];
-		this.uiSkin.outputlist.array=[];
+		this.manufactureRankItems=[];
+		for(var i=0;i < 20;i++){
+			this.manufactureRankItems.push(new RankItem());
+			this.manufactureRankItems[i].y=28*i;
+			this.manufactureRankItems[i].visible=false;
+			this.uiSkin.manufacturePanel.addChild(this.manufactureRankItems[i]);
+		}
+		this.uiSkin.maskimg.visible=false;
+		Laya.timer.loop(1000,this,this.updateTime);
+		this.updateTime();
 		Laya.timer.once(2000,this,this.initChatDiv);
 	}
 
@@ -30302,6 +30308,7 @@ var ChartControl=(function(_super){
 		this.getTenDyasOrders();
 		Laya.timer.loop(7200000,this,this.getCurMonthOrders);
 		this.getCurMonthOrders();
+		Laya.timer.loop(50,this,this.scrollRank);
 	}
 
 	//Browser.window.getChartData();
@@ -30433,16 +30440,57 @@ var ChartControl=(function(_super){
 			manufactRank.push({"rankname":manufactureNameDic[manucode],"amountNum":outputrank[manucode]});
 		}
 		manufactRank.sort(this.compareAmount);
-		while(manufactRank.length > 10){
-			manufactRank.splice(manufactRank.length-1,1);
-		}
 		for(var i=0;i < manufactRank.length;i++){
 			manufactRank[i].seqNum=(i+1);
 		}
-		this.uiSkin.outputlist.array=manufactRank;
+		if(manufactRank.length > 0){
+			var addnum=manufactRank.length-this.lastManuNum;
+			var thebottomPos=this.manufactureRankItems[this.lastManuNum-1].y;
+			for(var i=this.lastManuNum;i < this.lastManuNum+addnum;i++){
+				if(i < this.manufactureRankItems.length){
+					this.manufactureRankItems[i].y=this.manufactureRankItems[i-1].y+28;
+				}
+			}
+			for(var i=0;i < this.lastManuNum;i++){
+				if(this.manufactureRankItems[i].y > thebottomPos){
+					this.manufactureRankItems[i].y+=28 *addnum;
+				}
+			}
+			for(var i=0;i < this.manufactureRankItems.length;i++){
+				if(i < manufactRank.length){
+					this.manufactureRankItems[i].setData(manufactRank[i]);
+					this.manufactureRankItems[i].visible=true;
+				}
+				else
+				this.manufactureRankItems[i].visible=false;
+			}
+		}
+		if(manufactRank.length <=10){
+			for(var i=0;i < this.manufactureRankItems.length;i++)
+			this.manufactureRankItems[i].y=28*i;
+		}
+		this.lastManuNum=manufactRank.length;
 		for(var i=0;i < daygesture.length;i++)
 		daygesture[i] /=10000;
 		Browser.window.freshZheChart(this.dayHourChart,hours,daygesture);
+	}
+
+	__proto.scrollRank=function(){
+		if(this.lastManuNum > 10){
+			for(var i=0;i < this.lastManuNum;i++){
+				if(this.manufactureRankItems[i].y-1 <=-28){
+					this.manufactureRankItems[i].y=28 *(this.lastManuNum-1);
+				}
+				else
+				this.manufactureRankItems[i].y=this.manufactureRankItems[i].y-1;
+			}
+		}
+	}
+
+	__proto.updateTime=function(){
+		var fulltime=UtilTool.formatFullDateTime(new Date());
+		this.uiSkin.datetxt.text=fulltime.split(" ")[0];
+		this.uiSkin.timetxt.text=fulltime.split(" ")[1];
 	}
 
 	__proto.compareAmount=function(a,b){
@@ -37537,6 +37585,32 @@ var HTMLImage=(function(_super){
 })(Bitmap)
 
 
+//class ui.LogPanelUI extends laya.display.Scene
+var LogPanelUI=(function(_super){
+	function LogPanelUI(){
+		this.mainpanel=null;
+		this.bgimg=null;
+		this.input_account=null;
+		this.input_pwd=null;
+		this.btn_login=null;
+		this.closebtn=null;
+		this.txt_forget=null;
+		this.txt_reg=null;
+		LogPanelUI.__super.call(this);
+	}
+
+	__class(LogPanelUI,'ui.LogPanelUI',_super);
+	var __proto=LogPanelUI.prototype;
+	__proto.createChildren=function(){
+		_super.prototype.createChildren.call(this);
+		this.createView(LogPanelUI.uiView);
+	}
+
+	LogPanelUI.uiView={"type":"Scene","props":{"width":1920,"height":1080},"compId":2,"child":[{"type":"Panel","props":{"width":1920,"var":"mainpanel","height":1080},"compId":39,"child":[{"type":"Image","props":{"y":0,"x":0,"width":1920,"var":"bgimg","top":0,"skin":"commers/commonpopbg.png","sizeGrid":"5,5,5,5","left":0,"height":1080},"compId":17,"child":[{"type":"Image","props":{"y":0,"skin":"mainpage/registerbg.jpg","right":0},"compId":38},{"type":"Image","props":{"y":102,"x":713,"width":494,"skin":"commers/commonpopbg.png","height":432},"compId":21},{"type":"Image","props":{"y":100,"x":713,"width":494,"skin":"commers/inputbg.png","sizeGrid":"3,3,3,3","height":432},"compId":22},{"type":"Image","props":{"y":46,"x":905,"skin":"mainpage/halfcirc.png"},"compId":23},{"type":"Image","props":{"y":71,"x":929,"skin":"mainpage/shiliang.png"},"compId":24}]},{"type":"Image","props":{"y":192,"x":768,"width":384,"skin":"commers/inputbg.png","sizeGrid":"3,3,3,3","height":48},"compId":25,"child":[{"type":"Image","props":{"y":16,"x":11,"skin":"mainpage/accouticon.png"},"compId":26},{"type":"TextInput","props":{"y":0,"x":41,"width":328,"var":"input_account","sizeGrid":"3,3,3,3","promptColor":"#A5AAA6","prompt":"请输入账号","height":48,"fontSize":20,"font":"SimHei","color":"#262827"},"compId":6}]},{"type":"Image","props":{"y":280,"x":768,"width":384,"skin":"commers/inputbg.png","sizeGrid":"3,3,3,3","height":48},"compId":30,"child":[{"type":"Image","props":{"y":16,"x":11,"skin":"mainpage/loginicon.png"},"compId":31},{"type":"TextInput","props":{"y":0,"x":41,"width":328,"var":"input_pwd","sizeGrid":"3,3,3,3","promptColor":"#A5AAA6","prompt":"请输入密码","height":48,"fontSize":20,"font":"SimHei","color":"#262827"},"compId":32}]},{"type":"Button","props":{"y":364,"x":769,"width":382,"var":"btn_login","stateNum":3,"skin":"commers/btn1.png","sizeGrid":"3,3,3,3","labelSize":20,"labelFont":"SimHei","labelColors":"#FFFFFF,#FFFFFF,#FFFFFF,","label":"登陆","height":48},"compId":10},{"type":"Button","props":{"y":116,"x":1172,"var":"closebtn","skin":"commers/btnclose.png","labelSize":24},"compId":11},{"type":"Text","props":{"y":437,"x":1046,"width":64,"var":"txt_forget","text":"忘记密码","presetID":1,"height":16,"fontSize":16,"font":"SimHei","color":"#152326","runtime":"laya.display.Text"},"compId":33,"child":[{"type":"Script","props":{"presetID":2,"runtime":"laya.display.Sprite"},"compId":4}]},{"type":"Text","props":{"y":437,"x":1121,"width":37,"var":"txt_reg","text":"注册","presetID":1,"height":16,"fontSize":16,"font":"SimHei","color":"#152326","runtime":"laya.display.Text"},"compId":34,"child":[{"type":"Script","props":{"presetID":2,"runtime":"laya.display.Sprite"},"compId":35}]},{"type":"Label","props":{"y":437,"x":1112,"text":"|","fontSize":16,"font":"SimHei","color":"#152326"},"compId":36},{"type":"CheckBox","props":{"y":437,"x":769,"skin":"commers/multicheck.png","name":"checkAuto","labelSize":16,"labelFont":"SimHei","labelColors":"#152320,#152320,#152320","label":"下次自动登录"},"compId":37}]},{"type":"Script","props":{"runtime":"LogPanelControl"},"compId":41}],"loadList":["commers/commonpopbg.png","mainpage/registerbg.jpg","commers/inputbg.png","mainpage/halfcirc.png","mainpage/shiliang.png","mainpage/accouticon.png","mainpage/loginicon.png","commers/btn1.png","commers/btnclose.png","prefabs/LinksText.prefab","commers/multicheck.png"],"loadList3D":[]};
+	return LogPanelUI;
+})(Scene)
+
+
 /**
 *<code>View</code> 是一个视图类，2.0开始，更改继承至Scene类，相对于Scene，增加相对布局功能。
 */
@@ -37718,13 +37792,16 @@ var View=(function(_super){
 //class ui.ChartViewUI extends laya.display.Scene
 var ChartViewUI=(function(_super){
 	function ChartViewUI(){
+		this.timetxt=null;
+		this.datetxt=null;
 		this.toplabel=null;
 		this.newgroup=null;
 		this.todayOrderNun=null;
 		this.todayOrderAmount=null;
 		this.monthyOrderAmount=null;
 		this.areaList=null;
-		this.outputlist=null;
+		this.maskimg=null;
+		this.manufacturePanel=null;
 		this.materialBox=null;
 		this.monthBox=null;
 		this.tendayBox=null;
@@ -43478,31 +43555,6 @@ var Animation=(function(_super){
 })(AnimationBase)
 
 
-//class ui.LogPanelUI extends laya.ui.View
-var LogPanelUI=(function(_super){
-	function LogPanelUI(){
-		this.mainpanel=null;
-		this.bgimg=null;
-		this.input_account=null;
-		this.input_pwd=null;
-		this.btn_login=null;
-		this.closebtn=null;
-		this.txt_forget=null;
-		this.txt_reg=null;
-		LogPanelUI.__super.call(this);
-	}
-
-	__class(LogPanelUI,'ui.LogPanelUI',_super);
-	var __proto=LogPanelUI.prototype;
-	__proto.createChildren=function(){
-		laya.display.Scene.prototype.createChildren.call(this);
-		this.loadScene("LogPanel");
-	}
-
-	return LogPanelUI;
-})(View)
-
-
 //class ui.DataGridViewUI extends laya.ui.View
 var DataGridViewUI=(function(_super){
 	function DataGridViewUI(){
@@ -48507,7 +48559,7 @@ var VBox=(function(_super){
 })(LayoutBox)
 
 
-	Laya.__init([LoaderManager,EventDispatcher,CharBook,GameConfig,View,LocalStorage,Timer,SceneUtils,WebGLContext2D,GraphicAnimation,CallLater,Path]);
+	Laya.__init([EventDispatcher,LoaderManager,CharBook,GameConfig,View,LocalStorage,Timer,SceneUtils,WebGLContext2D,GraphicAnimation,CallLater,Path]);
 	/**LayaGameStart**/
 	new Main();
 
