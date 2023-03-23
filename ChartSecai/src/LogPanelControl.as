@@ -115,7 +115,7 @@ package {
 			if(result.code == 200)
 			{
 				
-
+								
 				//ViewManager.showAlert("登陆成功");
 				//EventCenter.instance.event(EventCenter.LOGIN_SUCESS, uiSKin.input_account.text);
 				

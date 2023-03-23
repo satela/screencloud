@@ -1251,7 +1251,7 @@ var GameConfig=(function(){
 	GameConfig.screenMode="none";
 	GameConfig.alignV="top";
 	GameConfig.alignH="left";
-	GameConfig.startScene="LogPanel.scene";
+	GameConfig.startScene="ChartView.scene";
 	GameConfig.sceneRoot="";
 	GameConfig.debug=false;
 	GameConfig.stat=false;
@@ -30261,15 +30261,15 @@ var ChartControl=(function(_super){
 	__proto.initChatDiv=function(){
 		var echart=Browser.window.echarts;
 		var chartdiv=Browser.document.createElement("div");
-		chartdiv.style="filter:alpha(opacity=100);opacity:100;width: 650;height:780px;left:275;top:120";
-		chartdiv.style.width=650/(Browser.pixelRatio)+60;
-		chartdiv.style.height=780/(Browser.pixelRatio)+60;
+		chartdiv.style="filter:alpha(opacity=100);opacity:100;width: 650;height:780px;left:0;top:320";
+		chartdiv.style.width=650/(Browser.pixelRatio)+10;
+		chartdiv.style.height=350/(Browser.pixelRatio)+80;
 		chartdiv.style.position="absolute";
 		chartdiv.style.zIndex=999;
 		Browser.document.body.appendChild(chartdiv);
 		this.materialChart=echart.init(chartdiv);
 		var chartdivMonth=Browser.document.createElement("div");
-		chartdivMonth.style="filter:alpha(opacity=100);opacity:100;width: 650;height:200px;left:620;top:115";
+		chartdivMonth.style="filter:alpha(opacity=100);opacity:100;width: 650;height:230px;left:620;top:88";
 		chartdivMonth.style.width=650/(Browser.pixelRatio)+20;
 		chartdivMonth.style.position="absolute";
 		chartdivMonth.style.zIndex=999;
@@ -30454,7 +30454,7 @@ var ChartControl=(function(_super){
 				this.manufactureRankItems[i].visible=false;
 			}
 		}
-		if(manufactRank.length <=10){
+		if(manufactRank.length <=26){
 			for(var i=0;i < this.manufactureRankItems.length;i++)
 			this.manufactureRankItems[i].y=28*i;
 		}
@@ -30465,7 +30465,7 @@ var ChartControl=(function(_super){
 	}
 
 	__proto.scrollRank=function(){
-		if(this.lastManuNum > 10){
+		if(this.lastManuNum > 26){
 			for(var i=0;i < this.lastManuNum;i++){
 				if(this.manufactureRankItems[i].y-1 <=-28){
 					this.manufactureRankItems[i].y=28 *(this.lastManuNum-1);
@@ -33643,6 +33643,7 @@ var Scene=(function(_super){
 		var loader=new SceneLoader();
 		loader.on("progress",null,onProgress);
 		loader.once("complete",null,create);
+		url=url+"?"+(new Date()).getTime().toString();
 		loader.load(url);
 		function onProgress (value){
 			if (Scene._loadPage)Scene._loadPage.event("progress",value);

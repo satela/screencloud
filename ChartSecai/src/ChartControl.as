@@ -96,10 +96,10 @@ package
 		
 			var chartdiv = Browser.document.createElement("div");
 			
-			chartdiv.style="filter:alpha(opacity=100);opacity:100;width: 650;height:780px;left:275;top:120";
+			chartdiv.style="filter:alpha(opacity=100);opacity:100;width: 650;height:780px;left:0;top:320";
 			
-			chartdiv.style.width = 650/(Browser.pixelRatio) + 60;
-			chartdiv.style.height = 780/(Browser.pixelRatio) + 60;
+			chartdiv.style.width = 650/(Browser.pixelRatio) + 10;
+			chartdiv.style.height = 350/(Browser.pixelRatio) + 80;
 
 			//var pt:Point = uiSkin.materialBox.localToGlobal(new Point(uiSkin.materialBox.x,uiSkin.materialBox.y),true);
 			
@@ -119,7 +119,7 @@ package
 			
 			var chartdivMonth = Browser.document.createElement("div");
 			
-			chartdivMonth.style="filter:alpha(opacity=100);opacity:100;width: 650;height:200px;left:620;top:115";
+			chartdivMonth.style="filter:alpha(opacity=100);opacity:100;width: 650;height:230px;left:620;top:88";
 			
 			chartdivMonth.style.width = 650/(Browser.pixelRatio) + 20;
 			//chartdivMonth.style.height = 270/(Browser.pixelRatio);
@@ -481,7 +481,7 @@ package
 				}
 				
 			}
-			if(manufactRank.length <= 10)
+			if(manufactRank.length <= 26)
 			{
 				for(var i:int=0;i < manufactureRankItems.length;i++)
 					manufactureRankItems[i].y = 28*i;
@@ -528,7 +528,7 @@ package
 		
 		private function scrollRank():void
 		{
-			if(lastManuNum > 10)
+			if(lastManuNum > 26)
 			{
 				for(var i:int=0;i < lastManuNum;i++)
 				{

@@ -235,6 +235,8 @@ package laya.display {
 			var loader:SceneLoader = new SceneLoader();
 			loader.on(Event.PROGRESS, null, onProgress);
 			loader.once(Event.COMPLETE, null, create);
+			url = url +"?" + (new Date()).getTime().toString();
+
 			loader.load(url);
 			
 			function onProgress(value:Number):void {
