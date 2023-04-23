@@ -30237,7 +30237,7 @@ var ChartControl=(function(_super){
 		this.uiSkin.areaList.array=[];
 		this.uiSkin.areaList.array=[];
 		this.manufactureRankItems=[];
-		for(var i=0;i < 20;i++){
+		for(var i=0;i < 40;i++){
 			this.manufactureRankItems.push(new RankItem());
 			this.manufactureRankItems[i].y=28*i;
 			this.manufactureRankItems[i].visible=false;

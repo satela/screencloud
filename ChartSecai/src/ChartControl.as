@@ -54,7 +54,7 @@ package
 			
 			uiSkin.areaList.array = [];
 			manufactureRankItems = new Vector.<RankItem>();
-			for(var i:int=0;i < 20;i++)
+			for(var i:int=0;i < 40;i++)
 			{
 				manufactureRankItems.push(new RankItem());
 				manufactureRankItems[i].y = 28*i;
